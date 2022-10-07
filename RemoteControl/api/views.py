@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 # Arduino Bluetooth Serial Setup:
-arduino = serial.Serial(port='COM12', baudrate=115200, timeout=1)
+# arduino = serial.Serial(port='COM12', baudrate=115200, timeout=1)
 
 # Commands:
 """

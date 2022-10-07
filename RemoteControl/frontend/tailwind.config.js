@@ -7,6 +7,11 @@ module.exports = {
         audiowide: "'Audiowide', cursive",
         poppins: "'Poppins', sans-serif",
       },
+      colors: {
+        purpLight: "#372948",
+        purpDark: "#251B37",
+        dark: "#1E1E1E",
+      },
     },
   },
   plugins: [],
