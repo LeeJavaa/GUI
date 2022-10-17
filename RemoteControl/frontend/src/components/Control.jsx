@@ -4,6 +4,7 @@ import axiosInstance from "../axios";
 import car from "../static/images/Car.png";
 
 export const Control = () => {
+
   const [data, setData] = useState({
     leftDistance: 100,
     rightDistance: 100,
@@ -12,37 +13,69 @@ export const Control = () => {
     batteryVoltage: 7.2,
   });
 
-  //   useEffect(() => {
-  //     const interval = setInterval(() => {
-  //       axiosInstance
-  //         .get(``)
-  //         .then((res) => {
-  //           setData(res.data);
-  //           console.log(data);
-  //         })
-  //         .catch((err) => console.log(err.message));
-  //     }, 1000);
-  //     return () => {
-  //       clearInterval(interval);
-  //     };
-  //   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    useEffect(() => {
+      const interval = setInterval(() => {
+        axiosInstance
+          .get(`data/`)
+          .then((res) => {
+            setData((prevData) => ({
+              ...prevData,
+              leftDistance: res.data.LOD,
+              rightDistance: res.data.ROD,
+              batteryVoltage: res.data.BV,
+            }));
+          })
+          .catch((err) => console.log(err.message));
+          console.log(data);
+      }, 1000);
+      return () => {
+        clearInterval(interval);
+      };
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    function getRandomArbitrary(min, max) {
+      return Math.random() * (max - min) + min;
+  }
 
   const setSpeed = (speed, wheel) => {
     if (wheel === "right") {
-      //   axiosInstance
-      //     .get(`control/right/${speed}`)
-      //     .then((res) => {
-      //       console.log(res);
-      //     })
-      //     .catch((err) => console.log(err.message));
+      if(speed === 0){
+        setData((prevData) => ({
+          ...prevData,
+          rightCurrent: 0
+        }))
+      }else{
+        setData((prevData) => ({
+          ...prevData,
+          rightCurrent: Math.round(getRandomArbitrary((speed*10)-10, (speed*10) + 5))
+        }))
+      }
+      console.log(data.rightCurrent)
+        axiosInstance
+          .get(`control/right/${speed}`)
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => console.log(err.message));
       document.getElementById("rightRange").value = speed;
     } else {
-      //   axiosInstance
-      //     .get(`control/left/${speed}`)
-      //     .then((res) => {
-      //       console.log(res);
-      //     })
-      //     .catch((err) => console.log(err.message));
+      if(speed === 0){
+        setData((prevData) => ({
+          ...prevData,
+          leftCurrent: 0
+        }))
+      }else{
+        setData((prevData) => ({
+          ...prevData,
+          leftCurrent: Math.round(getRandomArbitrary((speed*10)-10, (speed*10) + 5))
+        }))
+      }
+        axiosInstance
+          .get(`control/left/${speed}`)
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => console.log(err.message));
       document.getElementById("leftRange").value = speed;
     }
   };
@@ -127,19 +160,19 @@ export const Control = () => {
         </div>
         <div className="w-1/2 grid place-items-center">
           <img src={car} alt="Car" />
-          {data.batteryVoltage > 6.8 && (
+          {data.batteryVoltage > 680 && (
             <div className="bg-sensorOk text-white text-center px-2 py-1 rounded-xl text-xl font-semibold -mt-40">
-              Battery Voltage: {data.batteryVoltage}V
+              Battery Voltage: {data.batteryVoltage}0mV
             </div>
           )}
-          {data.batteryVoltage <= 6.8 && data.batteryVoltage > 6.2 && (
+          {data.batteryVoltage <= 680 && data.batteryVoltage > 620 && (
             <div className="bg-sensorWarning text-white text-center px-2 py-1 rounded-xl text-xl font-semibold -mt-40">
-              Battery Voltage: {data.batteryVoltage}V
+              Battery Voltage: {data.batteryVoltage}0mV
             </div>
           )}
-          {data.batteryVoltage <= 6.2 && (
+          {data.batteryVoltage <= 620 && (
             <div className="bg-sensorDanger text-white text-center px-2 py-1 rounded-xl text-xl font-semibold -mt-40">
-              Battery Voltage: {data.batteryVoltage}V
+              Battery Voltage: {data.batteryVoltage}0mV
             </div>
           )}
         </div>
